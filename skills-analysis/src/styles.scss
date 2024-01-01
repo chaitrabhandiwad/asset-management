@@ -1,0 +1,42 @@
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #121516;
+  --muted: #4b5563;
+  --accent: #ff8a3d;
+  --accent-dark: #b54100;
+  --sky: #c9e6ff;
+  --leaf: #c8f2c2;
+  --paper: #f7f3ee;
+  --card: #ffffff;
+  --stroke: #e2ded9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at top, #fef6ea 0%, var(--paper) 45%, #f1f0ea 100%);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Fraunces", serif;
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}

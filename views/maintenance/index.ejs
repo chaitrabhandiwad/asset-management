@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+<section class="section">
+  <div class="section-header">
+    <h1>Maintenance</h1>
+    <% if (['admin','manager'].includes(currentUser.role)) { %>
+      <a class="button" href="/maintenance/new">Log Maintenance</a>
+    <% } %>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Car</th>
+        <th>Type</th>
+        <th>Mileage</th>
+        <th>Cost</th>
+        <th>Logged By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (maintenance.length === 0) { %>
+        <tr><td colspan="6" class="muted">No maintenance logged yet</td></tr>
+      <% } %>
+      <% maintenance.forEach(m => { %>
+        <tr>
+          <td><%= m.date %></td>
+          <td><%= m.plate %> - <%= m.make %> <%= m.model %></td>
+          <td><%= m.type %></td>
+          <td><%= m.mileage || '-' %></td>
+          <td><%= m.cost ? `$${m.cost.toFixed(2)}` : '-' %></td>
+          <td><%= m.created_by_name %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+<%- include('../partials/footer') %>
