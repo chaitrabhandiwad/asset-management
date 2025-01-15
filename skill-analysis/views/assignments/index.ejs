@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+<section class="section">
+  <div class="section-header">
+    <h1>Assignments</h1>
+    <% if (['admin','manager'].includes(currentUser.role)) { %>
+      <a class="button" href="/assignments/new">New Assignment</a>
+    <% } %>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Driver</th>
+        <th>Car</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Purpose</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (assignments.length === 0) { %>
+        <tr><td colspan="6" class="muted">No assignments yet</td></tr>
+      <% } %>
+      <% assignments.forEach(a => { %>
+        <tr>
+          <td><%= a.driver %></td>
+          <td><%= a.plate %> - <%= a.make %> <%= a.model %></td>
+          <td><%= a.start_date %></td>
+          <td><%= a.end_date || '-' %></td>
+          <td><%= a.purpose || '-' %></td>
+          <td>
+            <% if (!a.end_date && ['admin','manager'].includes(currentUser.role)) { %>
+              <form method="post" action="/assignments/<%= a.id %>/return">
+                <button type="submit">Return</button>
+              </form>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+<%- include('../partials/footer') %>

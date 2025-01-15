@@ -1,0 +1,107 @@
+<div class="page">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Market Readiness Engine</p>
+      <h1>Skills Analysis for Staying Competitive</h1>
+      <p class="lede">
+        Build a live profile, compare against market demand, and surface the exact updates needed to stay in the
+        spotlight.
+      </p>
+    </div>
+    <div class="hero-card">
+      <h2>Target Role</h2>
+      <select [(ngModel)]="selectedRoleId" (change)="onRoleChange()">
+        <option *ngFor="let role of roles" [value]="role.id">{{ role.title }}</option>
+      </select>
+      <p class="role-summary">{{ selectedRole.summary }}</p>
+      <div class="coverage" *ngIf="analysis">
+        <span>Market coverage</span>
+        <strong>{{ analysis.coveragePercent }}%</strong>
+      </div>
+    </div>
+  </header>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Skills Inventory</h2>
+      <p class="muted">Add your current skills and how recently you used them.</p>
+
+      <div class="skill-form">
+        <input
+          type="text"
+          placeholder="Skill name"
+          [(ngModel)]="newSkillName"
+          aria-label="Skill name"
+        />
+        <label>
+          Level
+          <input type="range" min="1" max="5" [(ngModel)]="newSkillLevel" />
+        </label>
+        <label>
+          Last used (months)
+          <input type="number" min="0" max="60" [(ngModel)]="newSkillLastUsedMonths" />
+        </label>
+        <button type="button" (click)="addSkill()">Add / Update</button>
+      </div>
+
+      <div class="skill-list" *ngIf="userSkills.length">
+        <div class="skill-pill" *ngFor="let skill of userSkills; trackBy: trackBySkill">
+          <div>
+            <strong>{{ skill.name }}</strong>
+            <span>Level {{ skill.level }} · last used {{ skill.lastUsedMonths }} mo.</span>
+          </div>
+          <button type="button" (click)="removeSkill(skill)">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card accent">
+      <h2>Market Signals</h2>
+      <p class="muted">The role expects these capabilities right now.</p>
+      <div class="signal" *ngFor="let skill of selectedRole.skills">
+        <div>
+          <strong>{{ skill.name }}</strong>
+          <span>Importance {{ skill.importance }}/5 · {{ skill.trend }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Gap Analysis</h2>
+      <div class="analysis-grid" *ngIf="analysis">
+        <div>
+          <h3>Missing Skills</h3>
+          <p *ngIf="!analysis.missingSkills.length" class="muted">No critical gaps detected.</p>
+          <div class="tag" *ngFor="let skill of analysis.missingSkills">{{ skill.name }}</div>
+        </div>
+        <div>
+          <h3>Needs Depth</h3>
+          <p *ngIf="!analysis.lowProficiency.length" class="muted">Your depth is aligned.</p>
+          <div class="tag" *ngFor="let skill of analysis.lowProficiency">{{ skill.name }}</div>
+        </div>
+        <div>
+          <h3>Refresh Soon</h3>
+          <p *ngIf="!analysis.refreshSkills.length" class="muted">Skills are current.</p>
+          <div class="tag" *ngFor="let skill of analysis.refreshSkills">{{ skill.name }}</div>
+        </div>
+        <div>
+          <h3>Strengths</h3>
+          <p *ngIf="!analysis.strengths.length" class="muted">Add more skills to see strengths.</p>
+          <div class="tag" *ngFor="let skill of analysis.strengths">{{ skill.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card recommendation">
+      <h2>Update Plan</h2>
+      <div *ngIf="analysis">
+        <p class="muted">Actionable next steps based on your profile.</p>
+        <ol>
+          <li *ngFor="let statement of analysis.recommendations">{{ statement }}</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>

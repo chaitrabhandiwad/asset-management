@@ -1,0 +1,105 @@
+<%- include('../partials/header') %>
+<section class="section">
+  <div class="section-header">
+    <h1><%= car.plate %> - <%= car.make %> <%= car.model %></h1>
+    <a class="button" href="/cars">Back to Cars</a>
+  </div>
+
+  <div class="card">
+    <p><strong>VIN:</strong> <%= car.vin %></p>
+    <p><strong>Year:</strong> <%= car.year %></p>
+    <p><strong>Status:</strong> <span class="pill <%= car.status %>"><%= car.status %></span></p>
+    <p><strong>Location:</strong> <%= car.location || '-' %></p>
+    <p><strong>Notes:</strong> <%= car.notes || '-' %></p>
+  </div>
+</section>
+
+<% if (['admin','manager'].includes(currentUser.role)) { %>
+<section class="section">
+  <h3>Update Status</h3>
+  <form method="post" action="/cars/<%= car.id %>/update" class="form inline">
+    <label>Status
+      <select name="status">
+        <option value="available" <%= car.status === 'available' ? 'selected' : '' %>>available</option>
+        <option value="assigned" <%= car.status === 'assigned' ? 'selected' : '' %>>assigned</option>
+        <option value="maintenance" <%= car.status === 'maintenance' ? 'selected' : '' %>>maintenance</option>
+        <option value="retired" <%= car.status === 'retired' ? 'selected' : '' %>>retired</option>
+      </select>
+    </label>
+    <label>Location
+      <input name="location" value="<%= car.location || '' %>" />
+    </label>
+    <label>Notes
+      <input name="notes" value="<%= car.notes || '' %>" />
+    </label>
+    <button type="submit">Update</button>
+  </form>
+</section>
+<% } %>
+
+<section class="section">
+  <h3>Assignments</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Driver</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (assignments.length === 0) { %>
+        <tr><td colspan="4" class="muted">No assignments yet</td></tr>
+      <% } %>
+      <% assignments.forEach(a => { %>
+        <tr>
+          <td><%= a.driver %></td>
+          <td><%= a.start_date %></td>
+          <td><%= a.end_date || '-' %></td>
+          <td><%= a.purpose || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<section class="section">
+  <h3>Maintenance</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Mileage</th>
+        <th>Cost</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (maintenance.length === 0) { %>
+        <tr><td colspan="5" class="muted">No maintenance records yet</td></tr>
+      <% } %>
+      <% maintenance.forEach(m => { %>
+        <tr>
+          <td><%= m.date %></td>
+          <td><%= m.type %></td>
+          <td><%= m.mileage || '-' %></td>
+          <td><%= m.cost ? `$${m.cost.toFixed(2)}` : '-' %></td>
+          <td><%= m.notes || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<% if (currentUser.role === 'admin') { %>
+<section class="section danger">
+  <h3>Delete Car</h3>
+  <form method="post" action="/cars/<%= car.id %>/delete" onsubmit="return confirm('Delete this car?')">
+    <button type="submit" class="danger">Delete</button>
+  </form>
+</section>
+<% } %>
+
+<%- include('../partials/footer') %>
